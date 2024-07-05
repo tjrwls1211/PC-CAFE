@@ -1,5 +1,4 @@
-<img src="https://capsule-render.vercel.app/api?type=모양&color=색상코드&height=높이&section=header&text=텍스트&fontSize=텍스트크기" />
-PC방 자리 관리 시스템
+##PC방 자리 관리 시스템
 
 관리자 모드와 사용자 모드 두 개로 나누어서 사용할 수 있다.
 
