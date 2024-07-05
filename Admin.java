@@ -44,7 +44,7 @@ class Admin extends JFrame implements ListSelectionListener {
                 login();
             }
         } else {
-            System.exit(0); 
+            System.exit(0);
         }
     }
 
@@ -95,13 +95,13 @@ class Admin extends JFrame implements ListSelectionListener {
                 clearPanel();
                 showFoodOrders();
             } else if (function[indices[0]].equals("시간 추가")) {
-            	clearPanel();
-            	addTime();
+                clearPanel();
+                addTime();
             }
         }
     }
     private void showCustomer() {
-        JTextArea displayArea = new JTextArea(10, 30);
+        JTextArea displayArea = new JTextArea(20, 30);
         displayArea.setEditable(false);
 
         String URL = "jdbc:mysql://localhost:3306/pcroom";
@@ -128,7 +128,10 @@ class Admin extends JFrame implements ListSelectionListener {
             ex.printStackTrace();
         }
 
-        seatPanel.add(new JScrollPane(displayArea));
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        seatPanel.removeAll();
+        seatPanel.setLayout(new BorderLayout());
+        seatPanel.add(scrollPane, BorderLayout.CENTER);
         seatPanel.revalidate();
 
     }
@@ -150,7 +153,7 @@ class Admin extends JFrame implements ListSelectionListener {
         String URL = "jdbc:mysql://localhost:3306/pcroom";
         String USER = "root";
         String PASSWORD = "1234";
-        
+
         String[] customerNames = new String[16];
         Time[] customerTimes = new Time[16];
         Time[] customerLoginTimes = new Time[16];
@@ -193,126 +196,123 @@ class Admin extends JFrame implements ListSelectionListener {
 
             seatButton.addActionListener(e -> {
                 if (customerNames[seatIndex] != null && customerTimes[seatIndex] != null && customerLoginTimes[seatIndex] != null) {
-                    
-                	long timeInSeconds = timeToSeconds(customerTimes[seatIndex]);
+
+                    long timeInSeconds = timeToSeconds(customerTimes[seatIndex]);
                     long loginTimeInSeconds = timeToSeconds(customerLoginTimes[seatIndex]);
                     long nowInSeconds = nowToSeconds();
 
                     if (loginTimeInSeconds > nowInSeconds)
                     {
-                    	long usedTime = 86400 - loginTimeInSeconds + nowInSeconds;
-                    	long remainingTime = timeInSeconds - usedTime;
-                    	if (remainingTime > 0)
-                    	{
-                    	  	long remainingHours = remainingTime / 3600;
-                        	long remainingMinutes = (remainingTime % 3600) / 60;
-                        	JOptionPane.showMessageDialog(null,
-                            		"사용자 이름 : " + customerNames[seatIndex] +
-                                    "\n선불 시간 : " + remainingHours + " 시간 " + remainingMinutes + " 분",
-                                    "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    	else {
-                    		long postPaidTime = Math.abs(remainingTime);
-                    		long postPaidHours = postPaidTime / 3600;
-                        	long postPaidMinutes = (postPaidTime % 3600) / 60;
-                        	
-                        	JOptionPane.showMessageDialog(null,
-                            		"사용자 이름 : " + customerNames[seatIndex] +
-                                    "\n후불 시간 : " + postPaidHours + " 시간 " + postPaidMinutes + " 분",
-                                    "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                              
-                    }
-                    else {
-                    	long usedTime = nowInSeconds - loginTimeInSeconds;
-                    	long remainingTime = timeInSeconds - usedTime;
-                    	if (remainingTime > 0)
-                    	{
-                    		long remainingHours = remainingTime / 3600;
+                        long usedTime = 86400 - loginTimeInSeconds + nowInSeconds;
+                        long remainingTime = timeInSeconds - usedTime;
+                        if (remainingTime > 0)
+                        {
+                            long remainingHours = remainingTime / 3600;
                             long remainingMinutes = (remainingTime % 3600) / 60;
                             JOptionPane.showMessageDialog(null,
-                            		"사용자 이름 : " + customerNames[seatIndex] +
-                                    "\n선불 시간 : " + remainingHours + " 시간 " + remainingMinutes + " 분",
+                                    "사용자 이름 : " + customerNames[seatIndex] +
+                                            "\n선불 시간 : " + remainingHours + " 시간 " + remainingMinutes + " 분",
                                     "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
                         }
-                    	else {
-                    		long postPaidTime = Math.abs(remainingTime);
-                    		long postPaidHours = postPaidTime / 3600;
-                        	long postPaidMinutes = (postPaidTime % 3600) / 60;
-                      		JOptionPane.showMessageDialog(null,
-                            		"사용자 이름 : " + customerNames[seatIndex] +
-                                    "\n후불 시간 : " + postPaidHours + " 시간 " + postPaidMinutes + " 분",
+                        else {
+                            long postPaidTime = Math.abs(remainingTime);
+                            long postPaidHours = postPaidTime / 3600;
+                            long postPaidMinutes = (postPaidTime % 3600) / 60;
+
+                            JOptionPane.showMessageDialog(null,
+                                    "사용자 이름 : " + customerNames[seatIndex] +
+                                            "\n후불 시간 : " + postPaidHours + " 시간 " + postPaidMinutes + " 분",
+                                    "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                    }
+                    else {
+                        long usedTime = nowInSeconds - loginTimeInSeconds;
+                        long remainingTime = timeInSeconds - usedTime;
+                        if (remainingTime > 0)
+                        {
+                            long remainingHours = remainingTime / 3600;
+                            long remainingMinutes = (remainingTime % 3600) / 60;
+                            JOptionPane.showMessageDialog(null,
+                                    "사용자 이름 : " + customerNames[seatIndex] +
+                                            "\n선불 시간 : " + remainingHours + " 시간 " + remainingMinutes + " 분",
+                                    "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else {
+                            long postPaidTime = Math.abs(remainingTime);
+                            long postPaidHours = postPaidTime / 3600;
+                            long postPaidMinutes = (postPaidTime % 3600) / 60;
+                            JOptionPane.showMessageDialog(null,
+                                    "사용자 이름 : " + customerNames[seatIndex] +
+                                            "\n후불 시간 : " + postPaidHours + " 시간 " + postPaidMinutes + " 분",
                                     "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
                         }
                     }
-                   
+
                 } else {
                     JOptionPane.showMessageDialog(null, "비어있는 좌석입니다.", "좌석 정보", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-            
+
 
             if (customerNames[j] == null) {
                 seatButton.setBackground(Color.GRAY);
             }
-            
+
             seatPanel.add(seatButton);
         }
         JButton postPaidButton = new JButton("후불 좌석");
-        
-        postPaidButton.addActionListener(e -> {
-        	StringBuilder postPaidSeatNumbers = new StringBuilder();
-        	for (int i = 0; i < customerNames.length; i++) {
-        		if (customerNames[i] != null) {
-        			long timeInSeconds = timeToSeconds(customerTimes[i]);
-                    long loginTimeInSeconds = timeToSeconds(customerLoginTimes[i]);
-                    long nowInSeconds = nowToSeconds();
 
-                    if (loginTimeInSeconds > nowInSeconds)
-                    {
-                    	long usedTime = 86400 - loginTimeInSeconds + nowInSeconds;
-                    	long remainingTime = timeInSeconds - usedTime;
-                    	if (remainingTime > 0)
-                    	{
-                    		continue;
-                    	}
-                    	else {
-                    		postPaidSeatNumbers.append((i + 1)).append(", ");   
+        postPaidButton.addActionListener(e -> {
+                    StringBuilder postPaidSeatNumbers = new StringBuilder();
+                    for (int i = 0; i < customerNames.length; i++) {
+                        if (customerNames[i] != null) {
+                            long timeInSeconds = timeToSeconds(customerTimes[i]);
+                            long loginTimeInSeconds = timeToSeconds(customerLoginTimes[i]);
+                            long nowInSeconds = nowToSeconds();
+
+                            if (loginTimeInSeconds > nowInSeconds)
+                            {
+                                long usedTime = 86400 - loginTimeInSeconds + nowInSeconds;
+                                long remainingTime = timeInSeconds - usedTime;
+                                if (remainingTime > 0)
+                                {
+                                    continue;
+                                }
+                                else {
+                                    postPaidSeatNumbers.append((i + 1)).append(", ");
+                                }
                             }
-                    }
-                    else {
-                    	long usedTime = nowInSeconds - loginTimeInSeconds;
-                    	long remainingTime = timeInSeconds - usedTime;
-                    	if (remainingTime > 0)
-                    	{
-                    		continue;
-                    	}
-                    	else {
-                    		postPaidSeatNumbers.append((i + 1)).append(", ");                             
+                            else {
+                                long usedTime = nowInSeconds - loginTimeInSeconds;
+                                long remainingTime = timeInSeconds - usedTime;
+                                if (remainingTime > 0)
+                                {
+                                    continue;
+                                }
+                                else {
+                                    postPaidSeatNumbers.append((i + 1)).append(", ");
+                                }
+                            }
+                        }
+                        else {
+                            continue;
                         }
                     }
-            	}
-        		else {
-        			continue;
-        		}
-        	}
-        	if (postPaidSeatNumbers.length() > 0) {
-                JOptionPane.showMessageDialog(null, "후불 좌석 : " + postPaidSeatNumbers.toString(), "후불 좌석 정보", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "후불 좌석이 없습니다.", "후불 좌석 정보", JOptionPane.INFORMATION_MESSAGE);
-            }
-          }
+                    if (postPaidSeatNumbers.length() > 0) {
+                        JOptionPane.showMessageDialog(null, "후불 좌석 : " + postPaidSeatNumbers.toString(), "후불 좌석 정보", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "후불 좌석이 없습니다.", "후불 좌석 정보", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
         );
         seatPanel.add(postPaidButton);
         seatPanel.revalidate();
     }
-    
-   
-    
 
 
     private void showSales() {
-        JTextArea displayArea = new JTextArea(10, 30);
+        JTextArea displayArea = new JTextArea(20, 30);
         displayArea.setEditable(false);
 
         String URL = "jdbc:mysql://localhost:3306/pcroom";
@@ -335,16 +335,20 @@ class Admin extends JFrame implements ListSelectionListener {
             }
 
         } catch (SQLException ex) {
-            
-        ex.printStackTrace();
+
+            ex.printStackTrace();
         }
 
-        seatPanel.add(new JScrollPane(displayArea));
+        JScrollPane scrollPane = new JScrollPane(displayArea);
+        seatPanel.removeAll();
+        seatPanel.setLayout(new BorderLayout());
+        seatPanel.add(scrollPane, BorderLayout.CENTER);
         seatPanel.revalidate();
-
     }
+
+
     private void showFoodOrders() {
-    	JTextArea displayArea = new JTextArea(10, 30);
+        JTextArea displayArea = new JTextArea(10, 30);
         displayArea.setEditable(false);
 
         String URL = "jdbc:mysql://localhost:3306/pcroom";
@@ -360,13 +364,13 @@ class Admin extends JFrame implements ListSelectionListener {
                 int orderId = resultSet.getInt("order_id");
                 int seatNum = resultSet.getInt("seat_num");
                 String foodName = resultSet.getString("food_name");
-                
+
                 displayArea.append("------------------------------\n");
                 displayArea.append("\n주문 번호  : "+orderId + "\n");
                 displayArea.append("주문 음식 : " + foodName + "\n");
                 displayArea.append("좌석 번호 : " + seatNum + "번 좌석\n\n");
             }
-            
+
 
             seatPanel.add(new JScrollPane(displayArea));
             seatPanel.revalidate();
@@ -374,14 +378,14 @@ class Admin extends JFrame implements ListSelectionListener {
             ex.printStackTrace();
         }
     }
-    
+
     private void addTime() {
         String URL = "jdbc:mysql://localhost:3306/pcroom";
         String USER = "root";
         String PASSWORD = "1234";
-    	String customerName = JOptionPane.showInputDialog(null, "고객의 이름을 입력하세요:", "이름 입력", JOptionPane.QUESTION_MESSAGE);
+        String customerName = JOptionPane.showInputDialog(null, "고객의 이름을 입력하세요:", "이름 입력", JOptionPane.QUESTION_MESSAGE);
         int[] additionalHours = {1, 3, 5, 7, 10, 12};
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 50, 100)); 
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 3, 50, 100));
 
         for (int i = 0; i < 6; i++) {
             int hours = additionalHours[i];
@@ -408,12 +412,11 @@ class Admin extends JFrame implements ListSelectionListener {
                 }
             });
 
-            buttonPanel.add(addTimeButton); 
+            buttonPanel.add(addTimeButton);
             seatPanel.removeAll();
-            seatPanel.setLayout(new BorderLayout()); 
+            seatPanel.setLayout(new BorderLayout());
             seatPanel.add(buttonPanel, BorderLayout.CENTER);
-
-            seatPanel.revalidate(); 
+            seatPanel.revalidate();
         }
     }
 
